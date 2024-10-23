@@ -87,10 +87,22 @@ const Activities = ({ date, user, project }) => {
   };
 
   async function onSave() {
+    let worktime=0;
     for (let i = 0; i < activities.length; i++) {
       await api.post(`/activity`, activities[i]);
       toast.success(`Saved ${activities[i].projectName}`);
+      worktime += activities[i].total;
     }
+    let values = user;
+    values.days_worked = worktime/8;
+    try {
+      await api.put(`/user/${user._id}`, values);
+      toast.success("Updated!");
+    } catch (e) {
+      console.log(e);
+      toast.error("Some Error!");
+    }
+
   }
 
   async function onDelete(i) {

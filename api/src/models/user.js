@@ -21,7 +21,7 @@ const Schema = new mongoose.Schema({
   costPerDay: { type: Number, default: 100 },
   sellPerDay: { type: Number, default: 200 },
 
-  days_worked: { type: Number, default: 23 },
+  days_worked: { type: Number, default: 0 },
 
   description: { type: String },
   job_title: { type: String },
