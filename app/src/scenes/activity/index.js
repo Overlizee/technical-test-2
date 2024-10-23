@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { MdDeleteForever } from "react-icons/md";
@@ -87,14 +88,21 @@ const Activities = ({ date, user, project }) => {
   };
 
   async function onSave() {
-    let worktime=0;
+
     for (let i = 0; i < activities.length; i++) {
       await api.post(`/activity`, activities[i]);
       toast.success(`Saved ${activities[i].projectName}`);
-      worktime += activities[i].total;
     }
+    
+    const { data: dataWithoutDate } = await api.get(`/activity?user=${user.name}`);
+    let workTime=0;
+
+    for (let i = 0; i < dataWithoutDate.length; i++) {
+      workTime += dataWithoutDate[i].total;
+    }
+
     let values = user;
-    values.days_worked = worktime/8;
+    values.days_worked = workTime/8;
     try {
       await api.put(`/user/${user._id}`, values);
       toast.success("Updated!");
